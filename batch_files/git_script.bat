@@ -1,6 +1,6 @@
 @echo off
 REM Insert your commit message below:
-set COMMIT_MESSAGE=Updated README file.
+set COMMIT_MESSAGE=Simplified fdm function
 set BRANCH_NAME=main
 
 cd ../
@@ -8,6 +8,10 @@ cd ../
 git checkout %BRANCH_NAME%
 git add .
 git commit -m "%COMMIT_MESSAGE%"
+echo Commit message: %COMMIT_MESSAGE%
+echo Would you like to continue?
+pause
+
 git pull origin %BRANCH_NAME%
 git push origin %BRANCH_NAME%
 

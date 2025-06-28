@@ -94,7 +94,7 @@ def getParams(config):
         cond = []
         for i in range(sim_space_steps):
             # cond.append(1)
-            cond.append(0.5)
+            cond.append(0)
         environment["conductivity"] = cond
 
     def boundary_cond():
