@@ -1,0 +1,314 @@
+\documentclass{article}
+
+% The margin size has been adjusted to fit the headers.
+\usepackage[lmargin=0.5in, rmargin=0.5in, tmargin=0.75in, bmargin=0.75in]{geometry}
+
+% Required for inserting images
+\usepackage{graphicx} 
+\graphicspath{{./Images/}}
+
+% The next 2 packages allow more math symbols like therefore and because.
+\usepackage{amsmath}
+\usepackage{esint}   % Allows double and triple closed integrals.
+\usepackage{amssymb}
+
+% This package causes the following cautions: "Not defining \perthousand" and "Not defining \micro."
+\usepackage{gensymb} 
+
+% The following 3 packages make the quotation marks symbols populate in the correct direction:
+\usepackage [english]{babel}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
+% Allows for the writing out of the division of polynomials
+\usepackage{polynom}
+
+% Allows terms to have a slash through them when showing every step of an algebraic process.
+\usepackage{cancel}
+
+% Allows the use of headers and footers.
+\usepackage{fancyhdr}
+
+% Use for writing code
+\usepackage{listings}
+
+% Use for boxing equations in alignment environments
+\usepackage{empheq}
+
+% Allows the use of letters in an enumerate environment:
+\usepackage{enumitem}
+
+% Document preamble:
+\title{Finite Difference Method - Time Domain Project\\EERF 6351}
+\author{Jonathan Rusnak}
+\date{February 2025}
+
+
+\begin{document}
+    
+    \maketitle
+
+    \tableofcontents
+
+    \section{Differential Equations}
+        Write a system of linear differential equations for Ampere's law and Faraday's law.
+        \[
+            \nabla\times\overrightarrow{E}
+            =
+            -
+            \frac{\partial \overrightarrow{B}}{\partial t}
+        \]
+        \[  
+            \nabla \times \overrightarrow{H}
+            =
+            \overrightarrow{J}
+            +
+            \frac{\partial\overrightarrow{D}}{\partial t}
+        \]
+        For Faraday's law, we have:
+        \[
+            \nabla\times\overrightarrow{E}
+            =
+            \left|
+                \begin{matrix}
+                    \hat{i} & \hat{j} & \hat{k}\\
+                    \frac{\partial}{\partial x} &\frac{\partial}{\partial y} &\frac{\partial}{\partial z} \\
+                    E_x &E_y & E_z
+                \end{matrix}
+            \right|
+            =
+            \langle
+                \frac{\partial E_z}{\partial y}
+                -
+                \frac{\partial E_y}{\partial z}
+                ,
+                \frac{\partial E_x}{\partial z}
+                -
+                \frac{\partial E_z}{\partial x}
+                ,
+                \frac{\partial E_y}{\partial x}
+                -
+                \frac{\partial E_x}{\partial y}
+            \rangle
+            =
+            -
+            \langle
+                \frac{\partial B_x}{\partial t},
+                \frac{\partial B_y}{\partial t},
+                \frac{\partial B_z}{\partial t}
+            \rangle
+        \]
+        \begin{align}
+            -\frac{\partial B_x}{\partial t}&=\frac{\partial E_z}{\partial y}-\frac{\partial E_y}{\partial z}\\
+            -\frac{\partial B_y}{\partial t}&=\frac{\partial E_x}{\partial z}-\frac{\partial E_z}{\partial x}\\
+            -\frac{\partial B_z}{\partial t}&=\frac{\partial E_y}{\partial x}-\frac{\partial E_x}{\partial y}
+        \end{align}
+        \[  
+            \nabla \times \overrightarrow{H}
+            =
+            \overrightarrow{J}
+            +
+            \frac{\partial\overrightarrow{D}}{\partial t}
+        \]
+        \[
+            \nabla\times\overrightarrow{H}
+            =
+            \left|
+                \begin{matrix}
+                    \hat{i} & \hat{j} & \hat{k}\\
+                    \frac{\partial}{\partial x} &\frac{\partial}{\partial y} &\frac{\partial}{\partial z} \\
+                    H_x &H_y & H_z
+                \end{matrix}
+            \right|
+            =
+            \langle
+                \frac{\partial H_z}{\partial y}
+                -
+                \frac{\partial H_y}{\partial z}
+                ,
+                \frac{\partial H_x}{\partial z}
+                -
+                \frac{\partial H_z}{\partial x}
+                ,
+                \frac{\partial H_y}{\partial x}
+                -
+                \frac{\partial H_x}{\partial y}
+            \rangle
+            =
+            \langle
+                \frac{\partial D_x}{\partial t},
+                \frac{\partial D_y}{\partial t},
+                \frac{\partial D_z}{\partial t}
+            \rangle
+        \]
+        \begin{align}
+            \frac{\partial D_x}{\partial t}+\sigma E_x&=\frac{\partial H_z}{\partial y}-\frac{\partial H_y}{\partial z}\\
+            \frac{\partial D_y}{\partial t}+\sigma E_y&=\frac{\partial H_x}{\partial z}-\frac{\partial H_z}{\partial x}\\
+            \frac{\partial D_z}{\partial t}+\sigma E_z&=\frac{\partial H_y}{\partial x}-\frac{\partial H_x}{\partial y}
+        \end{align}
+        Changes with respect to $y$ or $z$ are set to zero.
+        The electric field in the $z$ direction is also set to zero:
+        \begin{align*}
+            -\mu\frac{\partial H_x}{\partial t}&=\frac{\partial E_z}{\partial y}-\frac{\partial E_y}{\partial z}\\
+            -\mu\frac{\partial H_y}{\partial t}&=\frac{\partial E_x}{\partial z}-\frac{\partial E_z}{\partial x}\\
+            -\mu\frac{\partial H_z}{\partial t}&=\frac{\partial E_y}{\partial x}-\frac{\partial E_x}{\partial y}\\
+            \frac{\partial D_x}{\partial t}&=\frac{\partial H_z}{\partial y}-\frac{\partial H_y}{\partial z}-\sigma E_x\\
+            \frac{\partial D_y}{\partial t}&=\frac{\partial H_x}{\partial z}-\frac{\partial H_z}{\partial x}-\sigma E_y\\
+            \frac{\partial D_z}{\partial t}&=\frac{\partial H_y}{\partial x}-\frac{\partial H_x}{\partial y}-\sigma E_z
+        \end{align*}
+        \begin{align*}
+            -\mu\frac{\partial H_x}{\partial t}&=0-0\\
+            -\mu\frac{\partial H_y}{\partial t}&=0-\frac{\partial}{\partial x}0\\
+            -\mu\frac{\partial H_z}{\partial t}&=\frac{\partial E_y}{\partial x}-0\\
+            \epsilon\frac{\partial E_x}{\partial t}&=0-0-\sigma E_x\\
+            \epsilon\frac{\partial E_y}{\partial t}&=0-\frac{\partial H_z}{\partial x}-\sigma E_y\\
+            \epsilon\frac{\partial }{\partial t}0&=\frac{\partial H_y}{\partial x}-0-\sigma E_z
+        \end{align*}
+        \begin{align*}
+            -\mu\frac{\partial H_x}{\partial t}&=0\\
+            -\mu\frac{\partial H_y}{\partial t}&=0\\
+            -\mu\frac{\partial H_z}{\partial t}&=\frac{\partial E_y}{\partial x}\\
+            \epsilon\frac{\partial E_x}{\partial t}&=-\sigma E_x\\
+            \epsilon\frac{\partial E_y}{\partial t}&=-\frac{\partial H_z}{\partial x}-\sigma E_y\\
+            0&=\frac{\partial H_y}{\partial x}-0
+        \end{align*}
+        \begin{align*}
+            -\mu\frac{\partial H_z}{\partial t}&=\frac{\partial E_y}{\partial x}\\
+            \epsilon\frac{\partial E_y}{\partial t}+\sigma E_y&=-\frac{\partial H_z}{\partial x}
+        \end{align*}
+        \begin{align*}
+            \frac{\partial H_z}{\partial t}&=-\frac{1}{\mu}\frac{\partial E_y}{\partial x}\\
+            \frac{\partial E_y}{\partial t}&=-\frac{1}{\epsilon}\left[\frac{\partial H_z}{\partial x}+\sigma E_y\right]
+        \end{align*}
+
+    \newpage
+    \section{Central Difference Equations}
+        \subsection{Faraday's Law}
+            \[
+                \frac{\partial H_z}{\partial t}
+                =
+                -\frac{1}{\mu}\frac{\partial E_y}{\partial x}
+            \]
+            The magnetic field and the electric field will be interleaved in time and space. 
+            To make the Yee grid work effectively, the forward difference equations will be used in space, and the central difference equations will be used in time.
+            \[
+                \frac{H_z^{n+\frac{1}{2}}\left(i+ \frac{1}{2} \right) - H_z^{n-\frac{1}{2}}\left(i+ \frac{1}{2} \right)  }{\Delta t}
+                =
+                -\frac{1}{u(i)}
+                \frac{E_y^n(i+1)-E_y^n(i)}{2\Delta x}
+            \]
+            Rearranging gives:
+            \[
+                H_z^{n+\frac{1}{2}}\left(i+ \frac{1}{2} \right)
+                =
+                H_z^{n-\frac{1}{2}}\left(i+ \frac{1}{2} \right)
+                -\frac{\Delta t}{u(i)}
+                \frac{E_y^n(i+1)-E_y^n(i)}{2\Delta x}
+            \]
+
+        \subsection{Ampere's Law}
+            \[
+                \frac{\partial E_y}{\partial t}
+                =
+                -\frac{1}{\epsilon}
+                \left[
+                    \frac{\partial H_z}{\partial x}
+                    +
+                    \sigma E_y
+                \right]
+            \]
+            \[
+                \frac{E_y^{n+1}(i) - E_y^{n}(i)}{\Delta t}
+                =
+                -\frac{1}{\epsilon}
+                \left[
+                    \frac{H_z^{n+\frac{1}{2}}\left( i+\frac{1}{2} \right) -H_z^{n+\frac{1}{2}}\left( i-\frac{1}{2} \right) }{\Delta x}
+                    +
+                    \sigma(i) E_y^{n}(i)
+                \right]
+            \]
+
+            \[
+                E_y^{n+1}(i) - E_y^{n}(i)
+                =
+                -\frac{\Delta t}{\epsilon}
+                \frac{H_z^{n+\frac{1}{2}}\left( i+\frac{1}{2} \right) -H_z^{n+\frac{1}{2}}\left( i-\frac{1}{2} \right) }{\Delta x}
+                -\frac{\Delta t}{\epsilon}
+                \sigma(i) E_y^{n}(i)
+            \]
+            \[
+                E_y^{n+1}(i)
+                =
+                -\frac{\Delta t}{\epsilon}
+                \frac{H_z^{n+\frac{1}{2}}\left( i+\frac{1}{2} \right) -H_z^{n+\frac{1}{2}}\left( i-\frac{1}{2} \right) }{\Delta x}
+                -\frac{\Delta t}{\epsilon}
+                \sigma(i) E_y^{n}(i)
+                +
+                E_y^{n}(i)
+            \]
+            \[
+                E_y^{n+1}(i)
+                =
+                -\frac{\Delta t}{\epsilon}
+                \frac{H_z^{n+\frac{1}{2}}\left( i+\frac{1}{2} \right) -H_z^{n+\frac{1}{2}}\left( i-\frac{1}{2} \right) }{\Delta x}
+                +
+                E_y^{n}(i)
+                \left[
+                    1
+                    -
+                    \frac{\Delta t\sigma(i)}{\epsilon}
+                \right]
+            \]
+            This gives the final system of recurrence relations:
+            \begin{equation}
+                E_y^{n+1}(i)
+                =
+                \left[
+                    1
+                    -
+                    \frac{\Delta t\sigma(i)}{\epsilon(i)}
+                \right]
+                E_y^{n}(i)
+                -
+                \frac{\Delta t}{\Delta x\epsilon(i)}
+                \left[
+                    H_z^{n+\frac{1}{2}}\left( i+\frac{1}{2} \right) -H_z^{n+\frac{1}{2}}\left( i-\frac{1}{2} \right)
+                \right]
+            \end{equation}
+            The above is coupled to the equation below, and the below must be evaluated first:
+            \begin{equation}
+                H_z^{n+\frac{1}{2}}\left(i+ \frac{1}{2} \right)
+                =
+                H_z^{n-\frac{1}{2}}\left(i+ \frac{1}{2} \right)
+                -\frac{\Delta t}{u(i)}
+                \frac{E_y^n(i+1)-E_y^n(i)}{2\Delta x}
+            \end{equation}
+            
+    \section{Programming}
+        For the purposes of programming, the equations must be rewritten to be more digestible. Let:
+        \[
+            A=
+            \frac{\Delta t}{2\Delta xu(i)}
+        \]
+        \[
+            B=
+            \left[
+                1
+                -
+                \frac{\Delta t\sigma(i)}{\epsilon(i)}
+            \right]
+        \]
+        \[
+            C=
+            \frac{\Delta t}{\Delta x\epsilon(i)}
+        \]
+        This gives the following system to program:
+        \begin{empheq}{align}
+                H_z^{n+\frac{1}{2}}\left(i+ \frac{1}{2} \right)&=H_z^{n-\frac{1}{2}}\left(i+ \frac{1}{2} \right)-A(i)\left( E_y^n(i+1)-E_y^n(i) \right)\\
+                E_y^{n+1}(i)&=B(i)E_y^{n}(i)-C(i)\left[H_z^{n+\frac{1}{2}}\left( i+\frac{1}{2} \right) -H_z^{n+\frac{1}{2}}\left( i-\frac{1}{2} \right)\right]
+        \end{empheq}
+
+        
+
+
+\end{document}

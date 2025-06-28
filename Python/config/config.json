@@ -1,0 +1,41 @@
+{
+    "application_settings":
+    {
+        "log_environment_dict": true
+    },
+    "general":
+    {
+        "length"              :0.9,
+        "length_multiplier"   :1E-0,
+        "sim_space_steps"     :120,
+        "sim_time_steps"      :100
+    },
+    "constants":
+    {
+        "c"         :3E8,
+        "epsilon_0" :8.854E-12,
+        "mu_0"      :12.5667E-7
+    },
+    "boundary_conditions":
+    [
+        [0,0],
+        [0,0]
+    ],
+    "forcing_functions":
+    [
+        {
+            "function_type" :"sin",
+            "location"      :60, 
+            "frequency"     :2E9
+        }
+    ],
+    "graph_settings":
+    [    
+        {
+            "graph_single_point": false,
+            "graph_surface"     : true,
+            "point_to_graph"    : 60,
+            "e_field"           : true
+        }
+    ]
+}
