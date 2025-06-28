@@ -32,9 +32,33 @@
     "graph_settings":
     [    
         {
-            "graph_single_point": false,
-            "graph_surface"     : true,
+            "graph_single_point": true,
+            "graph_surface"     : false,
             "point_to_graph"    : 60,
+            "e_field"           : true
+        },
+        {
+            "graph_single_point": true,
+            "graph_surface"     : false,
+            "point_to_graph"    : 65,
+            "e_field"           : true
+        },
+        {
+            "graph_single_point": true,
+            "graph_surface"     : false,
+            "point_to_graph"    : 70,
+            "e_field"           : true
+        },
+        {
+            "graph_single_point": true,
+            "graph_surface"     : false,
+            "point_to_graph"    : 90,
+            "e_field"           : true
+        },
+        {
+            "graph_single_point": true,
+            "graph_surface"     : false,
+            "point_to_graph"    : 119,
             "e_field"           : true
         }
     ]

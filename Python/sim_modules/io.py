@@ -19,7 +19,7 @@ def exportEnvironment(environment):
 
 def graph(out, environment, config):
     log_env         = config["application_settings"]["log_environment_dict"]
-    sim_space_steps = 120
+    sim_space_steps = config['general']["sim_space_steps"]
     if log_env:
         exportEnvironment(environment)
 
@@ -55,5 +55,5 @@ def graph(out, environment, config):
             plt.show()
         
         elif graph_surface:
-            x = np.linspace(0, 0.9, )
+            x = np.linspace(0, 0.9, sim_space_steps)
 

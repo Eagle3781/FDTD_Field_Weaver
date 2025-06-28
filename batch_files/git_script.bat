@@ -1,7 +1,9 @@
 @echo off
 REM Insert your commit message below:
-set COMMIT_MESSAGE=Your commit message
+set COMMIT_MESSAGE=Updated batch file and test environment.
 set BRANCH_NAME=main
+
+cd ../
 
 git checkout %BRANCH_NAME%
 git add .
