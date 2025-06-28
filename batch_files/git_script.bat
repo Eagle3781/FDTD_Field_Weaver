@@ -1,6 +1,6 @@
 @echo off
 REM Insert your commit message below:
-set COMMIT_MESSAGE=Updated batch file and test environment.
+set COMMIT_MESSAGE=Updated README file.
 set BRANCH_NAME=main
 
 cd ../
