@@ -1,4 +1,5 @@
 import json
+import numpy as np
 import matplotlib.pyplot as plt
 
 config_path = r"config/config.json"
@@ -17,7 +18,8 @@ def exportEnvironment(environment):
         log.write(json.dumps(environment, indent=4))
 
 def graph(out, environment, config):
-    log_env = config["application_settings"]["log_environment_dict"]
+    log_env         = config["application_settings"]["log_environment_dict"]
+    sim_space_steps = 120
     if log_env:
         exportEnvironment(environment)
 
@@ -53,5 +55,5 @@ def graph(out, environment, config):
             plt.show()
         
         elif graph_surface:
-            pass
+            x = np.linspace(0, 0.9, )
 
