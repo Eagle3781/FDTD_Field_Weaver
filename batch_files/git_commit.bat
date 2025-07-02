@@ -1,6 +1,6 @@
 @echo off
 REM Insert your commit message below:
-set COMMIT_MESSAGE=Better git batch scripts
+set COMMIT_MESSAGE=Better documentation for fdm.py
 set BRANCH_NAME=main
 
 cd ../

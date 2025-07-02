@@ -4,6 +4,65 @@
 import numpy as np
 
 def executeFDM(env):
+    """
+    ## `executeFDM(env)`
+
+    The `env` parameter should be a dictionary with the following keys:
+
+    ---
+
+    ### 🔌 Field Properties
+
+    - **Conductivity function**  
+    → Array defined in space.
+
+    - **Permittivity function** *(electric)*  
+    → Array defined in space.
+
+    - **Permeability function** *(magnetic)*  
+    → Array defined in space.
+
+    ---
+
+    ### ⚡ Initial Conditions
+
+    - Array defined in space, composed of two sub-arrays:
+    - `index 0`: Electric field `E`
+    - `index 1`: Magnetic field `H`
+
+    ---
+
+    ### 🧱 Boundary Conditions
+
+    - Same structure as Initial Conditions:
+    - `index 0`: Electric field `E`
+    - `index 1`: Magnetic field `H`
+
+    ---
+
+    ### 💥 Forcing Functions
+
+    - A **list of arrays**, each array defined in **space and time**
+    - Pad with empty lists for consistency
+    - This ensures easier access during the FDTD update step
+
+    ---
+
+    ### 📍 Forcing Function Locations
+
+    - Integer array of indices in **space**
+    - Example: `[60]` means there is a forcing function at `60 * dx`
+
+    ---
+
+    ### ⏱ Simulation Parameters
+
+    - `time_steps`: *(int)* Total number of time steps
+    - `space_steps`: *(int)* Total number of space steps
+    - `dx`: *(float)* Spatial resolution
+    - `dt`: *(float)* Temporal resolution
+
+    """
     # Environment should be a dict containing:
         # Conductivity function      (array in space)
         # Permittivity function      (array in space) (electric)
