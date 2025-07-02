@@ -63,34 +63,7 @@ def executeFDM(env):
     - `dt`: *(float)* Temporal resolution
 
     """
-    # Environment should be a dict containing:
-        # Conductivity function      (array in space)
-        # Permittivity function      (array in space) (electric)
-        # Permeability function      (array in space) (magnetic)
-        # Initial Conditions         (array in space)
-            # Composed of two arrays. index zero is the E field, index 1 is the H field
-
-        # Boundary Conditions        (array in space)
-            # Format the same as the initial conditions
-            # index zero is the E field
-            # index 1 is the H field
-
-        # Forcing functions          (list of arrays in space and time)
-            # pad with empty lists
-            # This is to ensure easier access in the FDTD algorithm
-
-        # Forcing Function Locations
-            # Integer array that contains the indices of the forcing functions
-            # if the array contains a 60 at index zero, that means that there is a forcing function in space at 60dx
-            # Simply append the list with the location of forcing functions in space
-           
-
-        # Time steps                 (Integer) Total number of steps in time
-        # Space steps                (Integer) Total number of steps in space
-        # dx                         (float)   spatial differential
-        # dt                         (float)   temporal differential
-
-    # Unpack environment dictionary
+    # Extract parameters from the environment dictionary
     sigma       = np.array(env["conductivity"])
     epsilon     = np.array(env["permittivity"])
     mu          = np.array(env["permeability"])

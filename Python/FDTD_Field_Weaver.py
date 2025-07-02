@@ -11,11 +11,12 @@ python FDTD_Field_Weaver.py
 
 def fieldWeaver():
     """
+    ## Field Weaver Function
     This function is the main entry point for the FDM simulation.
     It imports the configuration, retrieves parameters, executes the FDM algorithm,
     and graphs the results.
     """
-    print("Starting FDM Simulation...")
+    print("🚀 Starting FDM Simulation...")
 
     config      = configImport()
     environment = getParams(config)

@@ -1,6 +1,6 @@
 @echo off
 REM Insert your commit message below:
-set COMMIT_MESSAGE=Simplified fdm function
+set COMMIT_MESSAGE=Improved comments and documentation in FDTD simulation code
 set BRANCH_NAME=main
 
 cd ../

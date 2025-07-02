@@ -1,11 +1,19 @@
 import numpy as np
 
-# This module handles:
-    # the material properties
-    # Stability requirements
-    # Differential calculations
+
 
 def getParams(config):
+    """
+    ## `getParams(config)`
+    This function retrieves the simulation parameters from the configuration file
+    and prepares the environment for the FDM simulation.
+
+    ### Environment Setup
+    - Material properties
+    - Stability requirements
+    - Differential calculations
+    - Forcing functions
+    """
 
     environment = {}
 
@@ -23,6 +31,11 @@ def getParams(config):
     init_cond_values = []
 
     def differentials():
+        """
+        ### `differentials()`
+        This function calculates the spatial and temporal differentials
+        based on the speed of light and the wavelength.
+        """
         # For this run, dx = wavelength/20
         # wavelength = c/f
         dx = 0.0075
@@ -31,6 +44,12 @@ def getParams(config):
         environment["dt"] = dt
     
     def forcingFunctions():
+        """
+        ### `forcingFunctions()`
+        - This function generates the forcing functions based on the configuration file.
+        - It creates a 2D array of zeros except for the locations specified in the configuration.
+        - Each forcing function is defined by its type (cosine, sine, or delta function)
+        """
         # Note: This will only specify electric field forcing functions
 
         ff_locations     = []
@@ -79,18 +98,30 @@ def getParams(config):
         environment["space_steps"]       = sim_space_steps
 
     def permeability():
+        """
+        ### `permeability()`
+        This function sets the permeability values for the material in the simulation environment.
+        """
         perm = []
         for i in range(sim_space_steps):
             perm.append(mu_0)
         environment["permeability"] = perm
 
     def permittivity():
+        """
+        ### `permittivity()`
+        This function sets the permittivity values for the material in the simulation environment.
+        """
         perm = []
         for i in range(sim_space_steps):
             perm.append(epsilon_0)
         environment["permittivity"] = perm
 
     def conductance():
+        """
+        ### `conductance()`
+        This function sets the conductivity values for the material in the simulation environment.
+        """
         cond = []
         for i in range(sim_space_steps):
             # cond.append(1)
